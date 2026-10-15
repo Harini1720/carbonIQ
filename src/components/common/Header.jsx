@@ -35,6 +35,56 @@ export default function Header({ onMobileMenuToggle, isMobileMenuOpen }) {
     window.print();
   };
 
+  const exportCSV = () => {
+    const rows = [
+      ['CarbonIQ — Carbon Footprint Audit Report (PS05)'],
+      ['Generated Date', new Date().toISOString().split('T')[0]],
+      ['Campus Profile', activePreset.name],
+      ['Reporting Period', reportingPeriod],
+      [],
+      ['Emission Category', 'Scope', 'Activity Quantity', 'Unit', 'Emission Factor', 'Emissions (kg CO2e)', 'Emissions (tCO2e)'],
+      ['Electricity (Net Grid)', 'Scope 2', inputs.electricityKwh, 'kWh/mo', `${currentGridFactor} kg/kWh`, electricityEmissions.netEmissions.toFixed(1), (electricityEmissions.netEmissions / 1000).toFixed(2)],
+      ['Onsite Solar Offset', 'Scope 2', electricityEmissions.solarKwh.toFixed(0), 'kWh/mo', '0.0 kg/kWh (Avoided)', (-electricityEmissions.avoidedBySolar).toFixed(1), (-electricityEmissions.avoidedBySolar / 1000).toFixed(2)],
+      ['Commuter Transportation', 'Scope 3', Math.round(transportEmissions.vehicleKmTraveled), 'vehicle-km/mo', `${currentTransportMode.factorPerKm} kg/km`, transportEmissions.emissionsKg.toFixed(1), (transportEmissions.emissionsKg / 1000).toFixed(2)],
+      ['Solid Waste (Landfill)', 'Scope 3', inputs.wasteBreakdown.landfill || 0, 'kg/mo', '0.587 kg/kg', ((inputs.wasteBreakdown.landfill || 0) * 0.587).toFixed(1), (((inputs.wasteBreakdown.landfill || 0) * 0.587) / 1000).toFixed(2)],
+      ['Solid Waste (Recycled)', 'Scope 3', inputs.wasteBreakdown.recycled || 0, 'kg/mo', '0.021 kg/kg', ((inputs.wasteBreakdown.recycled || 0) * 0.021).toFixed(1), (((inputs.wasteBreakdown.recycled || 0) * 0.021) / 1000).toFixed(2)],
+      ['Solid Waste (Composted)', 'Scope 3', inputs.wasteBreakdown.composted || 0, 'kg/mo', '0.010 kg/kg', ((inputs.wasteBreakdown.composted || 0) * 0.010).toFixed(1), (((inputs.wasteBreakdown.composted || 0) * 0.010) / 1000).toFixed(2)],
+      [],
+      ['Summary Metrics', 'Value (kg CO2e)', 'Value (tCO2e)', 'Percentage'],
+      ['Total Baseline Footprint', totalFootprint.totalKg.toFixed(1), totalFootprint.totalTonnes.toFixed(2), '100%'],
+      ['Projected Decarbonized', scenarioResults.projectedTotalKg.toFixed(1), scenarioResults.projectedTotalTonnes.toFixed(2), `${(100 - scenarioResults.percentageReduction).toFixed(1)}%`],
+      ['Avoided Emissions Delta', `-${scenarioResults.avoidedTotalKg.toFixed(1)}`, `-${scenarioResults.avoidedTotalTonnes.toFixed(2)}`, `-${scenarioResults.percentageReduction.toFixed(1)}%`]
+    ];
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + rows.map(e => e.map(cell => `"${cell}"`).join(',')).join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `CarbonIQ_Audit_${activePreset.id}_${reportingPeriod}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportJSON = () => {
+    const payload = {
+      platform: 'CarbonIQ — PS05',
+      exportDate: new Date().toISOString(),
+      preset: activePreset,
+      period: reportingPeriod,
+      inputs: inputs,
+      footprint: totalFootprint,
+      scenarioProjections: scenarioResults
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `CarbonIQ_Dataset_${activePreset.id}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <>
       <header
@@ -222,20 +272,43 @@ export default function Header({ onMobileMenuToggle, isMobileMenuOpen }) {
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-              <button
-                onClick={() => setShowExportModal(false)}
-                className="btn btn-secondary btn-sm"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={triggerExport}
-                className="btn btn-primary btn-sm"
-              >
-                <Download size={14} />
-                Print / Save PDF
-              </button>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={exportCSV}
+                  className="btn btn-secondary btn-sm"
+                  style={{ fontSize: '0.75rem', gap: '4px' }}
+                  title="Download metered breakdown in CSV format"
+                >
+                  <Download size={13} />
+                  Export CSV
+                </button>
+                <button
+                  onClick={exportJSON}
+                  className="btn btn-secondary btn-sm"
+                  style={{ fontSize: '0.75rem', gap: '4px' }}
+                  title="Download full JSON dataset"
+                >
+                  <Download size={13} />
+                  Export JSON
+                </button>
+              </div>
+
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={() => setShowExportModal(false)}
+                  className="btn btn-secondary btn-sm"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={triggerExport}
+                  className="btn btn-primary btn-sm"
+                >
+                  <Download size={14} />
+                  Print / Save PDF
+                </button>
+              </div>
             </div>
           </div>
         </div>

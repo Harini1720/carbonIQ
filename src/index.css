@@ -386,3 +386,27 @@ body {
 @media (max-width: 768px) {
   .grid-cols-2, .grid-cols-3, .grid-cols-4 { grid-template-columns: 1fr; }
 }
+
+/* Print Stylesheet for Executive PDF generation */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  header, aside, .sidebar-open, .sidebar-normal, button:not(.print-include) {
+    display: none !important;
+  }
+  .main-content-wrapper {
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+  .glass-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+  }
+  .page-header-title, strong, h1, h2, h3, h4 {
+    color: #064e3b !important;
+  }
+}
