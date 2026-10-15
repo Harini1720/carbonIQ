@@ -91,7 +91,7 @@ export default function MetricCard({
       </div>
 
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '8px' }}>
-        <div style={{ fontSize: '1.9rem', fontWeight: 800, fontFamily: 'var(--font-sans)', color: '#ffffff', letterSpacing: '-0.02em' }}>
+        <div style={{ fontSize: '1.9rem', fontWeight: 800, fontFamily: 'var(--font-sans)', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
           <AnimatedCounter value={value} decimals={decimals} />
         </div>
         {unit && (

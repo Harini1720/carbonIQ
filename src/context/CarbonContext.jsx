@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
+import React, { createContext, useContext, useState, useMemo, useEffect } from 'react';
 import { CAMPUS_PRESETS } from '../data/campusPresets';
 import { GRID_EMISSION_REGIONS, TRANSPORT_MODES, WASTE_STREAMS } from '../data/emissionFactors';
 import { CAMPUS_BUILDINGS } from '../data/buildingsData';
@@ -14,6 +14,23 @@ import {
 const CarbonContext = createContext(null);
 
 export function CarbonProvider({ children }) {
+  // Theme state: 'forest' (default), 'light', 'cyber'
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem('carboniq_theme') || 'forest';
+    } catch {
+      return 'forest';
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('carboniq_theme', theme);
+    } catch {}
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.className = `theme-${theme}`;
+  }, [theme]);
+
   // Current active preset
   const [activePresetId, setActivePresetId] = useState('dsu_innovation');
   const activePreset = useMemo(
@@ -244,7 +261,10 @@ export function CarbonProvider({ children }) {
     activeBuildingRetrofits,
     toggleBuildingRetrofit,
     applyRecommendationToScenario,
-    allBuildings: CAMPUS_BUILDINGS
+    allBuildings: CAMPUS_BUILDINGS,
+    // Theme
+    theme,
+    setTheme
   };
 
   return (

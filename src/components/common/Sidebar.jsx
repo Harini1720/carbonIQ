@@ -112,8 +112,8 @@ export default function Sidebar({ activePage, onNavigate, isMobileOpen, onCloseM
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
-                Carbon<span style={{ color: '#34d399' }}>IQ</span>
+              <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+                Carbon<span style={{ color: 'var(--primary)' }}>IQ</span>
               </span>
               <span
                 style={{
@@ -121,7 +121,7 @@ export default function Sidebar({ activePage, onNavigate, isMobileOpen, onCloseM
                   padding: '2px 5px',
                   borderRadius: '4px',
                   background: 'rgba(16, 185, 129, 0.2)',
-                  color: '#6ee7b7',
+                  color: 'var(--text-secondary)',
                   fontWeight: 700
                 }}
               >
@@ -159,8 +159,8 @@ export default function Sidebar({ activePage, onNavigate, isMobileOpen, onCloseM
                     borderRadius: '10px',
                     border: 'none',
                     background: isActive ? 'rgba(16, 185, 129, 0.16)' : 'transparent',
-                    color: isActive ? '#ffffff' : 'var(--text-secondary)',
-                    fontWeight: isActive ? 700 : 500,
+                    color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
+                    fontWeight: isActive ? 800 : 500,
                     fontSize: '0.875rem',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease',
@@ -171,7 +171,7 @@ export default function Sidebar({ activePage, onNavigate, isMobileOpen, onCloseM
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <Icon
                       size={18}
-                      color={isActive ? '#34d399' : '#6ee7b7aa'}
+                      color={isActive ? 'var(--primary)' : 'var(--text-dim)'}
                       style={{ transition: 'color 0.15s ease' }}
                     />
                     <span>{item.label}</span>
@@ -182,8 +182,8 @@ export default function Sidebar({ activePage, onNavigate, isMobileOpen, onCloseM
                         fontSize: '0.65rem',
                         padding: '2px 6px',
                         borderRadius: '4px',
-                        background: isActive ? 'rgba(52, 211, 153, 0.25)' : 'rgba(255, 255, 255, 0.05)',
-                        color: isActive ? '#a7f3d0' : 'var(--text-muted)',
+                        background: isActive ? 'rgba(52, 211, 153, 0.25)' : 'rgba(128, 128, 128, 0.1)',
+                        color: isActive ? 'var(--primary)' : 'var(--text-muted)',
                         fontWeight: 600
                       }}
                     >
@@ -200,18 +200,18 @@ export default function Sidebar({ activePage, onNavigate, isMobileOpen, onCloseM
         <div style={{ padding: '16px', borderTop: '1px solid var(--border-subtle)' }}>
           <div
             style={{
-              background: 'rgba(16, 28, 24, 0.7)',
+              background: 'var(--bg-card-muted)',
               padding: '14px',
               borderRadius: '12px',
               border: '1px solid var(--border-subtle)'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <CheckCircle2 size={13} color="#34d399" />
+              <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <CheckCircle2 size={13} color="var(--primary)" />
                 Decarbonization Delta
               </span>
-              <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: 800 }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 800 }}>
                 -{scenarioResults.percentageReduction.toFixed(1)}%
               </span>
             </div>

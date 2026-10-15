@@ -1,8 +1,8 @@
-:root {
+:root, [data-theme='forest'], body.theme-forest {
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Color Palette */
+  /* Theme 1: Forest Dark (Default) */
   --bg-main: #0c1512;
   --bg-surface: #12211c;
   --bg-card: #162a24;
@@ -42,6 +42,74 @@
 
   --sidebar-width: 260px;
   --header-height: 70px;
+}
+
+/* Theme 2: Clean Modern Sustainability Light Mode */
+[data-theme='light'], body.theme-light {
+  --bg-main: #f0fdf4;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f7fee7;
+  --bg-card-muted: #ecfdf5;
+
+  --border-subtle: rgba(5, 150, 105, 0.16);
+  --border-medium: rgba(5, 150, 105, 0.32);
+  --border-bright: #059669;
+
+  --text-primary: #064e3b;
+  --text-secondary: #047857;
+  --text-muted: #374151;
+  --text-dim: #6b7280;
+
+  --primary: #059669;
+  --primary-hover: #047857;
+  --primary-glow: rgba(5, 150, 105, 0.25);
+
+  --emerald: #059669;
+  --teal: #0d9488;
+  --forest: #022c22;
+  --amber: #d97706;
+  --rose: #e11d48;
+  --sky: #0284c7;
+
+  --shadow-sm: 0 1px 4px rgba(6, 78, 59, 0.08);
+  --shadow-md: 0 6px 20px rgba(6, 78, 59, 0.1);
+  --shadow-lg: 0 14px 36px rgba(6, 78, 59, 0.14);
+  --shadow-glow: 0 0 24px rgba(5, 150, 105, 0.15);
+}
+
+/* Theme 3: Cyber Emerald High-Contrast Dark */
+[data-theme='cyber'], body.theme-cyber {
+  --bg-main: #020705;
+  --bg-surface: #06110d;
+  --bg-card: #091a13;
+  --bg-card-hover: #0e291e;
+  --bg-card-muted: #040c09;
+
+  --border-subtle: rgba(0, 255, 157, 0.2);
+  --border-medium: rgba(0, 255, 157, 0.45);
+  --border-bright: #00ff9d;
+
+  --text-primary: #ffffff;
+  --text-secondary: #34d399;
+  --text-muted: #a7f3d0;
+  --text-dim: #38a169;
+
+  --primary: #00ff9d;
+  --primary-hover: #10b981;
+  --primary-glow: rgba(0, 255, 157, 0.4);
+
+  --emerald: #00ff9d;
+  --teal: #2dd4bf;
+  --forest: #064e3b;
+  --amber: #fbbf24;
+  --rose: #fb7185;
+  --sky: #38bdf8;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 14px 40px rgba(0, 0, 0, 0.85);
+  --shadow-glow: 0 0 30px rgba(0, 255, 157, 0.25);
 }
 
 * {
@@ -137,11 +205,15 @@ body {
 }
 
 /* Typography Utilities */
+h1, h2, h3, h4 {
+  color: var(--text-primary);
+}
+
 .page-header-title {
   font-size: 1.85rem;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 12px;

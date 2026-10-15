@@ -9,7 +9,11 @@ import {
   Sparkles,
   Menu,
   X,
-  FileText
+  FileText,
+  Sun,
+  Moon,
+  Zap,
+  Palette
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -20,7 +24,9 @@ export default function Header({ onMobileMenuToggle, isMobileMenuOpen }) {
     reportingPeriod,
     setReportingPeriod,
     totalFootprint,
-    scenarioResults
+    scenarioResults,
+    theme,
+    setTheme
   } = useCarbon();
 
   const [showExportModal, setShowExportModal] = useState(false);
@@ -91,7 +97,7 @@ export default function Header({ onMobileMenuToggle, isMobileMenuOpen }) {
         style={{
           height: 'var(--header-height)',
           borderBottom: '1px solid var(--border-subtle)',
-          background: 'rgba(18, 33, 28, 0.85)',
+          background: 'var(--bg-surface)',
           backdropFilter: 'blur(12px)',
           display: 'flex',
           alignItems: 'center',
@@ -115,7 +121,7 @@ export default function Header({ onMobileMenuToggle, isMobileMenuOpen }) {
 
           {/* Campus Preset Selector */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Building2 size={18} color="#34d399" />
+            <Building2 size={18} color="var(--primary)" />
             <select
               value={activePresetId}
               onChange={(e) => switchPreset(e.target.value)}
@@ -124,7 +130,8 @@ export default function Header({ onMobileMenuToggle, isMobileMenuOpen }) {
                 padding: '6px 12px',
                 fontSize: '0.875rem',
                 fontWeight: 600,
-                background: 'rgba(16, 28, 24, 0.9)',
+                background: 'var(--bg-card-muted)',
+                color: 'var(--text-primary)',
                 borderColor: 'var(--border-medium)',
                 borderRadius: '8px',
                 cursor: 'pointer'
@@ -144,13 +151,58 @@ export default function Header({ onMobileMenuToggle, isMobileMenuOpen }) {
           </span>
         </div>
 
-        {/* Right Section: Period Toggle & Export */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        {/* Right Section: Theme Switcher, Period Toggle & Export */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Live Theme Switcher */}
+          <div
+            style={{
+              display: 'flex',
+              background: 'var(--bg-card-muted)',
+              padding: '3px',
+              borderRadius: '8px',
+              border: '1px solid var(--border-subtle)',
+              alignItems: 'center'
+            }}
+          >
+            {[
+              { id: 'forest', label: 'Forest', icon: Moon, title: 'Deep Forest Dark Mode' },
+              { id: 'light', label: 'Light', icon: Sun, title: 'Clean Modern Sustainability Light Mode' },
+              { id: 'cyber', label: 'Cyber', icon: Zap, title: 'High-Contrast Cyber Emerald Mode' }
+            ].map((t) => {
+              const isCurrent = theme === t.id;
+              const Icon = t.icon;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setTheme(t.id)}
+                  title={t.title}
+                  style={{
+                    background: isCurrent ? 'var(--primary)' : 'transparent',
+                    color: isCurrent ? '#ffffff' : 'var(--text-muted)',
+                    border: 'none',
+                    padding: '4px 9px',
+                    borderRadius: '6px',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <Icon size={12} />
+                  <span>{t.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
           {/* Period Selector Tabs */}
           <div
             style={{
               display: 'flex',
-              background: 'rgba(16, 28, 24, 0.9)',
+              background: 'var(--bg-card-muted)',
               padding: '3px',
               borderRadius: '8px',
               border: '1px solid var(--border-subtle)'
