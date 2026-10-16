@@ -1,4 +1,4 @@
-# 🏆 CarbonIQ (PS05) — Hackathon Presentation & Judging Guide
+# 🏆 CarbonIQ — Hackathon Presentation & Judging Guide
 
 Use this guide to deliver a winning pitch to hackathon judges.
 
@@ -43,7 +43,7 @@ Use this guide to deliver a winning pitch to hackathon judges.
 
 ## 💡 3. Key Differentiators to Emphasize
 
-| Feature | Typical Student Projects | CarbonIQ (PS05) |
+| Feature | Typical Student Projects | CarbonIQ |
 |---|---|---|
 | **Architecture** | Hardcoded mockups or simple forms | Full-stack reactive state with centralized mathematical engine |
 | **Visuals** | Static images or basic CSS cards | Animated 2.5D isometric SVG campus with live microgrid flows |
@@ -56,7 +56,7 @@ Use this guide to deliver a winning pitch to hackathon judges.
 ## ❓ 4. Judge Q&A Preparation & Winning Answers
 
 ### Q1: *"Where does your data come from? Are these real sensors?"*
-> **Answer:** *"For this prototype, the numbers represent a calibrated academic demonstration baseline (PS05). However, unlike toy apps that invent numbers, every emission factor in CarbonIQ is authentic—sourced directly from the Central Electricity Authority (CEA India Baseline Database v19, 0.82 kg CO₂e/kWh), US EPA eGRID, and IPCC AR6. The data model is modular, so physical IoT meters or BACnet/MQTT building automation feeds can be plugged directly into our state engine."*
+> **Answer:** *"For this prototype, the numbers represent a calibrated academic demonstration baseline. However, unlike toy apps that invent numbers, every emission factor in CarbonIQ is authentic—sourced directly from the Central Electricity Authority (CEA India Baseline Database v19, 0.82 kg CO₂e/kWh), US EPA eGRID, and IPCC AR6. The data model is modular, so physical IoT meters or BACnet/MQTT building automation feeds can be plugged directly into our state engine."*
 
 ### Q2: *"How do you handle double-counting in commuter transportation?"*
 > **Answer:** *"In our transport calculation module, vehicle occupancy is explicitly factored in. For private vehicles, total passenger-kilometers are divided by the carpool occupancy factor before applying the fuel conversion factor. This ensures carpoolers share a single vehicle's tailpipe footprint rather than multiplying it."*

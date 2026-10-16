@@ -1,0 +1,61 @@
+{
+  "name": "@carboniq/frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "desktop:bundle-backend": "node scripts/bundle-desktop-backend.mjs",
+    "desktop:build": "npm run build && npm run desktop:bundle-backend && electron-builder --win nsis"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.4",
+    "lucide-react": "^1.16.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "electron": "^38.3.0",
+    "electron-builder": "^26.0.12",
+    "esbuild": "^0.25.10",
+    "vite": "^5.4.10"
+  },
+  "main": "electron/main.cjs",
+  "build": {
+    "appId": "com.carboniq.carbonvision",
+    "productName": "CarbonVision AI",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-desktop/**/*",
+      "electron/main.cjs",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/carboniq-icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "CarbonVision AI"
+    }
+  }
+}

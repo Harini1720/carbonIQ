@@ -10,7 +10,13 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+frontend/dist-desktop/
+frontend/release/
 *.local
+backend/data/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
 
 # Editor directories and files
 .vscode/*
