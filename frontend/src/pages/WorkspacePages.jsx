@@ -792,7 +792,7 @@ function SettingsPage({ onNavigate }) {
 
 export default function WorkspacePages({ page, onNavigate }) {
   switch (page) {
-    case 'organizations': return <OrganizationsPage />;
+    case 'organizations': return <OrganizationsPage onNavigate={onNavigate} />;
     case 'buildings': return <BuildingsPage onNavigate={onNavigate} />;
     case 'analytics': return <AnalyticsPage onNavigate={onNavigate} />;
     case 'action-tracker': return <ActionTrackerPage onNavigate={onNavigate} />;

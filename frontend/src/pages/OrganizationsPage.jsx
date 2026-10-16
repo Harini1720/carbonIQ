@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  ArrowLeft, Building2, CalendarDays, CheckCircle2, CircleAlert, Database, LockKeyhole,
+  ArrowLeft, BarChart3, Building2, CalendarDays, CheckCircle2, CircleAlert, Database, LockKeyhole,
   MailPlus, Plus, Search, ShieldCheck, Trash2, Users
 } from 'lucide-react';
 import { apiRequest, useAuth } from '../context/AuthContext';
@@ -217,7 +217,7 @@ function OrganizationList({ onOpen }) {
   );
 }
 
-function OrganizationDetail({ organizationId, onBack }) {
+function OrganizationDetail({ organizationId, onBack, onNavigate }) {
   const { user } = useAuth();
   const carbon = useCarbon();
   const [data, setData] = useState(null);
@@ -445,7 +445,18 @@ function OrganizationDetail({ organizationId, onBack }) {
       <section className="glass-card organization-section-card">
         <div className="organization-list-toolbar">
           <div><h2 className="workspace-card-title"><Database size={18} /> Carbon reports</h2><p className="workspace-section-copy">Reports contain only the calculator's user-entered categories and derived totals. Values are not independently verified.</p></div>
-          <button className="btn btn-primary btn-sm" disabled={!carbon.hasCompleteFootprint || busy} onClick={saveReport}>Save current calculation</button>
+          <div className="organization-report-actions">
+            <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('analytics')}>
+              <BarChart3 size={14} /> View report analytics
+            </button>
+            <button
+              className="btn btn-primary btn-sm"
+              disabled={busy}
+              onClick={carbon.hasCompleteFootprint ? saveReport : () => onNavigate('calculator')}
+            >
+              {carbon.hasCompleteFootprint ? 'Save current calculation' : 'Enter activity data'}
+            </button>
+          </div>
         </div>
         {!carbon.hasCompleteFootprint && <p className="workspace-section-copy">Complete the calculator inputs before saving a report.</p>}
         {data.reports.length === 0 ? <div className="workspace-inline-empty">No carbon reports saved to this organisation.</div> : (
@@ -465,7 +476,7 @@ function OrganizationDetail({ organizationId, onBack }) {
   );
 }
 
-export default function OrganizationsPage() {
+export default function OrganizationsPage({ onNavigate }) {
   const { status } = useAuth();
   const { selectOrganization } = useOrganizationSelection();
   const [selectedId, setSelectedId] = useState('');
@@ -487,7 +498,7 @@ export default function OrganizationsPage() {
           <AuthGate />
         </>
       ) : selectedId ? (
-        <OrganizationDetail organizationId={selectedId} onBack={() => setSelectedId('')} />
+        <OrganizationDetail organizationId={selectedId} onBack={() => setSelectedId('')} onNavigate={onNavigate} />
       ) : (
         <OrganizationList onOpen={openOrganization} />
       )}

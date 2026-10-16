@@ -2,7 +2,7 @@ import React from 'react';
 import { useCarbon } from '../../context/CarbonContext';
 import { WASTE_STREAMS } from '../../data/emissionFactors';
 import { formatKg, formatPercent } from '../../utils/formatters';
-import { Trash2, Recycle, Apple, Cpu, AlertTriangle, BookOpen } from 'lucide-react';
+import { Trash2, Recycle, Apple, Cpu } from 'lucide-react';
 
 export default function WasteCalculator() {
   const {
@@ -137,49 +137,6 @@ export default function WasteCalculator() {
         })}
       </div>
 
-      {/* Scientific Limitation & Transparency Note */}
-      <div
-        style={{
-          background: 'rgba(245, 158, 11, 0.08)',
-          border: '1px solid rgba(245, 158, 11, 0.25)',
-          padding: '12px 14px',
-          borderRadius: '8px',
-          fontSize: '0.78rem',
-          color: 'var(--text-secondary)',
-          marginBottom: '14px',
-          display: 'flex',
-          gap: '10px'
-        }}
-      >
-        <AlertTriangle size={18} color="#f59e0b" style={{ flexShrink: 0, marginTop: '2px' }} />
-        <div>
-          <strong style={{ display: 'block', color: 'var(--text-primary)', marginBottom: '2px' }}>
-            Waste Modeling Scope & Methodological Boundary:
-          </strong>
-          Factors reflect EPA WARM v15 and IPCC Municipal Solid Waste biological models. Hazardous chemical laboratory wastes and clinical biological wastes are excluded due to lack of open-source life-cycle factors.
-        </div>
-      </div>
-
-      {/* Mathematical Breakdown Box */}
-      <div
-        style={{
-          background: 'var(--bg-card-muted)',
-          padding: '12px 14px',
-          borderRadius: '8px',
-          border: '1px solid var(--border-subtle)',
-          fontSize: '0.78rem',
-          color: 'var(--text-muted)'
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-primary)', fontWeight: 600, marginBottom: '4px' }}>
-          <BookOpen size={13} color="var(--amber)" />
-          Waste Emission Formula:
-        </div>
-        <div style={{ fontFamily: 'var(--font-mono)', color: 'var(--amber)', marginTop: '2px' }}>
-          Total Waste CO₂e = Σ (Stream Quantity in kg × Stream Factor in kg CO₂e/kg)
-          = {formatKg(wasteEmissions.totalEmissionsKg)}
-        </div>
-      </div>
     </div>
   );
 }

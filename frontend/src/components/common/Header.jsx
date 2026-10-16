@@ -167,36 +167,22 @@ export default function Header({ onMobileMenuToggle, isMobileMenuOpen, onNavigat
   return (
     <>
       <header
-        style={{
-          height: 'var(--header-height)',
-          borderBottom: '1px solid rgba(148, 205, 190, 0.18)',
-          background: 'var(--shell-header)',
-          color: '#f1fbf8',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '18px',
-          padding: '0 20px',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 60
-        }}
+        className="app-topbar"
       >
-        <div className="topbar-brand" style={{ display: 'flex', alignItems: 'center', gap: '11px', minWidth: '250px' }}>
+        <div className="topbar-brand">
           <button
             onClick={onMobileMenuToggle}
             className="btn btn-secondary btn-sm topbar-menu-button"
-            style={{ display: 'none', color: '#d3e7e2', borderColor: 'rgba(211, 231, 226, 0.24)', background: 'rgba(255,255,255,0.06)' }}
             id="mobile-nav-toggle"
             aria-label="Toggle navigation"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="primary-navigation"
           >
             {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
           <div className="topbar-brand-icon"><Leaf size={20} /></div>
           <div>
-            <strong style={{ display: 'block', color: '#f1fbf8', fontSize: '0.98rem', lineHeight: 1.2 }}>
+            <strong className="topbar-brand-name">
               CarbonVision<span className="topbar-brand-accent"> AI</span>
             </strong>
             <span className="topbar-tagline">Smarter buildings. Lower carbon.</span>
@@ -204,7 +190,7 @@ export default function Header({ onMobileMenuToggle, isMobileMenuOpen, onNavigat
         </div>
 
         {/* Right Section: Theme Switcher, Period Toggle & Export */}
-        <div className="topbar-controls" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="topbar-controls">
           <form className="topbar-search" onSubmit={handleSearch} role="search">
             <Search size={15} />
             <input
@@ -223,7 +209,6 @@ export default function Header({ onMobileMenuToggle, isMobileMenuOpen, onNavigat
           <button
             onClick={() => setShowExportModal(true)}
             className="btn btn-secondary btn-sm topbar-export"
-            style={{ gap: '6px', background: 'rgba(255, 255, 255, 0.08)', color: '#e1efeb', borderColor: 'rgba(211, 231, 226, 0.24)' }}
             disabled={!hasCompleteFootprint}
             title={hasCompleteFootprint ? 'Export user-entered emissions data' : 'Complete the calculator fields before exporting an emissions report'}
           >

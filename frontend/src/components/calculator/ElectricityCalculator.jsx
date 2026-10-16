@@ -77,7 +77,7 @@ export default function ElectricityCalculator() {
             <input
               type="number"
               min="0"
-              step="500"
+              step="any"
               value={inputs.electricityKwh}
               onChange={handleKwhChange}
               className="form-input"
