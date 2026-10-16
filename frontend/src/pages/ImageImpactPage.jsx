@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AlertCircle,
   ArrowRight,
@@ -97,6 +97,8 @@ function formatKg(value) {
 export default function ImageImpactPage() {
   const [image, setImage] = useState(null);
   const [imageError, setImageError] = useState('');
+  const [cameraActive, setCameraActive] = useState(false);
+  const [cameraStarting, setCameraStarting] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [analysisState, setAnalysisState] = useState('idle');
   const [scanStage, setScanStage] = useState(0);
@@ -110,6 +112,8 @@ export default function ImageImpactPage() {
   const [reportingPeriod, setReportingPeriod] = useState('');
   const [improvement, setImprovement] = useState('');
   const [reductionAssumption, setReductionAssumption] = useState(0);
+  const cameraStreamRef = useRef(null);
+  const cameraVideoRef = useRef(null);
   const [observations, setObservations] = useState(() => Object.fromEntries(
     OBSERVATIONS.map(observation => [observation.id, { status: 'Not reviewed', note: '', draft: '', editing: false }])
   ));
@@ -125,6 +129,16 @@ export default function ImageImpactPage() {
     ? null
     : emissionsKg * (1 - reductionAssumption / 100);
   const selectedFactor = GRID_EMISSION_REGIONS.find(region => region.id === factorSource);
+
+  useEffect(() => {
+    if (cameraActive && cameraVideoRef.current && cameraStreamRef.current) {
+      cameraVideoRef.current.srcObject = cameraStreamRef.current;
+    }
+  }, [cameraActive]);
+
+  useEffect(() => () => {
+    cameraStreamRef.current?.getTracks().forEach(track => track.stop());
+  }, []);
 
   useEffect(() => {
     if (!image) {
@@ -194,7 +208,71 @@ export default function ImageImpactPage() {
     event.target.value = '';
   };
 
+  const stopCamera = () => {
+    cameraStreamRef.current?.getTracks().forEach(track => track.stop());
+    cameraStreamRef.current = null;
+    setCameraActive(false);
+  };
+
+  const startCamera = async () => {
+    setImageError('');
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setImageError('Camera access is unavailable. Open this app on localhost or HTTPS in a browser that supports camera access.');
+      return;
+    }
+
+    setCameraStarting(true);
+    try {
+      cameraStreamRef.current = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: { facingMode: { ideal: 'environment' } }
+      });
+      setCameraActive(true);
+    } catch (error) {
+      if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        setImageError('Camera permission was denied. Allow camera access in your browser settings and try again.');
+      } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+        setImageError('No camera was found on this device.');
+      } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+        setImageError('The camera is busy or unavailable. Close other apps using it and try again.');
+      } else {
+        setImageError(`Could not open the camera: ${error.message}`);
+      }
+    } finally {
+      setCameraStarting(false);
+    }
+  };
+
+  const captureCameraImage = () => {
+    const video = cameraVideoRef.current;
+    if (!video || video.videoWidth === 0 || video.videoHeight === 0) {
+      setImageError('The camera is not ready yet. Wait for the preview, then try again.');
+      return;
+    }
+
+    const scale = Math.min(1, 1920 / video.videoWidth, 1920 / video.videoHeight);
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(video.videoWidth * scale);
+    canvas.height = Math.round(video.videoHeight * scale);
+    const context = canvas.getContext('2d');
+    if (!context) {
+      setImageError('Your browser could not capture the camera image.');
+      return;
+    }
+
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    canvas.toBlob(blob => {
+      if (!blob) {
+        setImageError('The camera image could not be saved. Please try again.');
+        return;
+      }
+      acceptFile(new File([blob], 'sustainability-studio-camera.jpg', { type: 'image/jpeg' }));
+      stopCamera();
+    }, 'image/jpeg', 0.9);
+  };
+
   const clearImage = () => {
+    stopCamera();
     setImage(null);
     setImageError('');
     setAnalysisState('idle');
@@ -251,7 +329,15 @@ export default function ImageImpactPage() {
               acceptFile(event.dataTransfer.files?.[0]);
             }}
           >
-            {image ? (
+            {cameraActive ? (
+              <div className="studio-camera-preview">
+                <video ref={cameraVideoRef} autoPlay playsInline muted aria-label="Live camera preview" />
+                <div className="studio-camera-actions">
+                  <button className="btn btn-primary btn-sm" onClick={captureCameraImage}><Camera size={14} /> Capture photo</button>
+                  <button className="btn btn-secondary btn-sm" onClick={stopCamera}><X size={14} /> Cancel</button>
+                </div>
+              </div>
+            ) : image ? (
               <>
                 <img className={`studio-preview-image${analysisState === 'scanning' ? ' is-scanning' : ''}`} src={image.url} alt={`Uploaded building preview: ${image.name}`} />
                 {analysisState === 'scanning' && (
@@ -275,10 +361,10 @@ export default function ImageImpactPage() {
                     Choose image
                     <input type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" onChange={handleFileChange} />
                   </label>
-                  <label className="btn btn-secondary btn-sm studio-choose-button">
-                    <Camera size={14} /> Take photo
-                    <input type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" capture="environment" onChange={handleFileChange} />
-                  </label>
+                  <button className="btn btn-secondary btn-sm" onClick={startCamera} disabled={cameraStarting}>
+                    {cameraStarting ? <LoaderCircle className="studio-loading-icon" size={14} /> : <Camera size={14} />}
+                    {cameraStarting ? 'Opening camera…' : 'Take photo'}
+                  </button>
                 </div>
               </div>
             )}
@@ -291,10 +377,10 @@ export default function ImageImpactPage() {
                 <Upload size={14} /> Replace
                 <input type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" onChange={handleFileChange} />
               </label>
-              <label className="btn btn-secondary btn-sm">
-                <Camera size={14} /> Take photo
-                <input type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" capture="environment" onChange={handleFileChange} />
-              </label>
+              <button className="btn btn-secondary btn-sm" onClick={startCamera} disabled={cameraStarting}>
+                {cameraStarting ? <LoaderCircle className="studio-loading-icon" size={14} /> : <Camera size={14} />}
+                {cameraStarting ? 'Opening camera…' : 'Take photo'}
+              </button>
               <button className="btn btn-secondary btn-sm" onClick={clearImage}><X size={14} /> Remove</button>
               <button
                 className="btn btn-primary btn-sm"

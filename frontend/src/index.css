@@ -2186,6 +2186,29 @@ body.theme-lavender .badge-blue {
   gap: 8px;
 }
 
+.studio-camera-preview {
+  display: grid;
+  width: 100%;
+  gap: 10px;
+  padding: 12px;
+}
+
+.studio-camera-preview video {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  border-radius: 8px;
+  background: #101816;
+  object-fit: contain;
+}
+
+.studio-camera-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
 .studio-preview-image {
   display: block;
   width: 100%;
