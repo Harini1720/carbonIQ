@@ -28,6 +28,13 @@ export default function TransportCalculator() {
     updateInputs({ carpoolingOccupancy: e.target.value });
   };
 
+  const handleModeSelect = mode => {
+    updateInputs({
+      selectedTransportMode: mode.id,
+      carpoolingOccupancy: mode.isVehicleBased ? String(mode.typicalOccupancy) : ''
+    });
+  };
+
   const modeIconMap = {
     car_petrol: Car,
     car_diesel: Car,
@@ -90,7 +97,9 @@ export default function TransportCalculator() {
             return (
               <button
                 key={mode.id}
-                onClick={() => updateInputs({ selectedTransportMode: mode.id })}
+                type="button"
+                aria-pressed={isSelected}
+                onClick={() => handleModeSelect(mode)}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
@@ -158,10 +167,12 @@ export default function TransportCalculator() {
             <input
               type="number"
               min="0"
-              step="50"
+              step="1"
               value={inputs.commutersCount}
               onChange={handleCommutersChange}
               className="form-input"
+              placeholder="e.g. 1"
+              aria-label="Commuter count"
             />
             <span className="unit-tag">users</span>
           </div>
@@ -169,9 +180,11 @@ export default function TransportCalculator() {
 
         {/* Carpooling Occupancy (if vehicle based) */}
         <div className="form-group" style={{ marginBottom: 0 }}>
-          <label className="form-label" style={{ fontSize: '0.8rem' }}>Vehicle Occupancy</label>
+          <label className="form-label" htmlFor="vehicle-occupancy" style={{ fontSize: '0.8rem' }}>Vehicle Occupancy</label>
           <div className="form-input-unit">
             <input
+              id="vehicle-occupancy"
+              aria-label="Vehicle occupancy"
               type="number"
               min="1"
               max="6"
@@ -180,10 +193,17 @@ export default function TransportCalculator() {
               value={inputs.carpoolingOccupancy}
               onChange={handleOccupancyChange}
               className="form-input"
+              placeholder={currentTransportMode?.isVehicleBased ? 'e.g. 1' : 'Select a private vehicle'}
+              aria-describedby="vehicle-occupancy-help"
               style={{ opacity: currentTransportMode?.isVehicleBased ? 1 : 0.5 }}
             />
             <span className="unit-tag">passengers</span>
           </div>
+          <span id="vehicle-occupancy-help" className="transport-input-help">
+            {currentTransportMode?.isVehicleBased
+              ? 'Average passengers per vehicle, including the driver.'
+              : 'Select Car, Electric Vehicle, or Motorcycle to enter vehicle occupancy.'}
+          </span>
         </div>
       </div>
 
