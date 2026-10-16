@@ -3,6 +3,7 @@ import {
   AlertCircle,
   ArrowRight,
   BadgeCheck,
+  Camera,
   Check,
   ImagePlus,
   Leaf,
@@ -268,11 +269,17 @@ export default function ImageImpactPage() {
               <div className="studio-drop-prompt">
                 <span className="studio-upload-icon"><Upload size={23} /></span>
                 <strong>Drag and drop a building image</strong>
-                <span>or browse to choose a file from this device</span>
-                <label className="btn btn-secondary btn-sm studio-choose-button">
-                  Choose image
-                  <input type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" onChange={handleFileChange} />
-                </label>
+                <span>Browse this device or take a photo</span>
+                <div className="studio-upload-actions">
+                  <label className="btn btn-secondary btn-sm studio-choose-button">
+                    Choose image
+                    <input type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" onChange={handleFileChange} />
+                  </label>
+                  <label className="btn btn-secondary btn-sm studio-choose-button">
+                    <Camera size={14} /> Take photo
+                    <input type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" capture="environment" onChange={handleFileChange} />
+                  </label>
+                </div>
               </div>
             )}
           </div>
@@ -283,6 +290,10 @@ export default function ImageImpactPage() {
               <label className="btn btn-secondary btn-sm">
                 <Upload size={14} /> Replace
                 <input type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" onChange={handleFileChange} />
+              </label>
+              <label className="btn btn-secondary btn-sm">
+                <Camera size={14} /> Take photo
+                <input type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" capture="environment" onChange={handleFileChange} />
               </label>
               <button className="btn btn-secondary btn-sm" onClick={clearImage}><X size={14} /> Remove</button>
               <button

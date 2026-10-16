@@ -2179,6 +2179,13 @@ body.theme-lavender .badge-blue {
   opacity: 0;
 }
 
+.studio-upload-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
 .studio-preview-image {
   display: block;
   width: 100%;
@@ -2248,6 +2255,11 @@ body.theme-lavender .badge-blue {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+.studio-image-actions label {
+  position: relative;
+  overflow: hidden;
 }
 
 .studio-analysis-status {
